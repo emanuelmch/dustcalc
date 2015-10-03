@@ -55,6 +55,12 @@
 			<Add option="-Wswitch-enum" />
 			<Add option="-pedantic" />
 		</Compiler>
+		<Unit filename="src/calc/calculator.cpp" />
+		<Unit filename="src/calc/calculator.h" />
+		<Unit filename="src/data/collection.cpp" />
+		<Unit filename="src/data/collection.h" />
+		<Unit filename="src/data/library.cpp" />
+		<Unit filename="src/data/library.h" />
 		<Unit filename="src/main.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
