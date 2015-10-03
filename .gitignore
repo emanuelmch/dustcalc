@@ -1,0 +1,27 @@
+build/
+
+# Executable binaries
+debug
+release
+profile
+test
+
+# Executable windows binaries
+debug.exe
+release.exe
+profile.exe
+test.exe
+
+# Generated files
+gmon.out
+gprof.txt
+val.log
+valcheck.log
+
+# Code::Blocks generated files
+*.depend
+*.layout
+bin
+obj
+ValgrindOut.xml
+
