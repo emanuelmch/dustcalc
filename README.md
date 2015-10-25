@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/emanuelmch/dustcalc.svg?branch=master)](https://travis-ci.org/emanuelmch/dustcalc)
+
 # dustcalc
 Dust calculator for Hearthstone collections
 
