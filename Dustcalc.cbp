@@ -61,9 +61,17 @@
 		<Unit filename="src/data/collection.h" />
 		<Unit filename="src/data/library.cpp" />
 		<Unit filename="src/data/library.h" />
+		<Unit filename="src/lib/json.cpp" />
+		<Unit filename="src/lib/json.h" />
 		<Unit filename="src/main.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
+		</Unit>
+		<Unit filename="tests/lib/jsonTest.cpp">
+			<Option target="Tests/Debug" />
+		</Unit>
+		<Unit filename="tests/lib/jsonTest.h">
+			<Option target="Tests/Debug" />
 		</Unit>
 		<Unit filename="tests/main.cpp">
 			<Option target="Tests/Debug" />
