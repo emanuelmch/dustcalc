@@ -39,6 +39,12 @@ void Json::read(const string &content) {
 	} else if (isNumber(firstChar)) {
 		this->type = JsonType::Number;
 		this->numberValue = stringToUnsignedLong(content);
+	} else if (content == "true") {
+		this->type = JsonType::Boolean;
+		this->booleanValue = true;
+	} else if (content == "false") {
+		this->type = JsonType::Boolean;
+		this->booleanValue = false;
 	}
 }
 
