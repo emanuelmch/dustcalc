@@ -51,6 +51,38 @@ void JsonTest::objectWithOneIntegerMember() {
     CPPUNIT_ASSERT_EQUAL((unsigned long)123, member->numberValue);
 }
 
+void JsonTest::objectWithOneBooleanMember_True() {
+    string content = "{\"bool\":true}";
+
+    Json json;
+    json.read(content);
+
+    CPPUNIT_ASSERT_EQUAL(JsonType::Object, json.type);
+    CPPUNIT_ASSERT_EQUAL(1, (int)json.members.size());
+
+    Json* member = json.getMember("bool");
+    CPPUNIT_ASSERT(member != NULL);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Member type should be Boolean", JsonType::Boolean, member->type);
+    CPPUNIT_ASSERT_EQUAL(string("bool"), *(member->name));
+    CPPUNIT_ASSERT_EQUAL(true, member->booleanValue);
+}
+
+void JsonTest::objectWithOneBooleanMember_False() {
+    string content = "{\"bool\":false}";
+
+    Json json;
+    json.read(content);
+
+    CPPUNIT_ASSERT_EQUAL(JsonType::Object, json.type);
+    CPPUNIT_ASSERT_EQUAL(1, (int)json.members.size());
+
+    Json* member = json.getMember("bool");
+    CPPUNIT_ASSERT(member != NULL);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Member type should be Boolean", JsonType::Boolean, member->type);
+    CPPUNIT_ASSERT_EQUAL(string("bool"), *(member->name));
+    CPPUNIT_ASSERT_EQUAL(false, member->booleanValue);
+}
+
 void JsonTest::objectWithOneArrayMember_Empty() {
     string content = "{\"array\":[]}";
 

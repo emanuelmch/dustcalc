@@ -6,6 +6,8 @@ static inline char getClosingSymbol(const char openingSymbol) {
     switch (openingSymbol) {
         case '[': return ']';
         case '{': return '}';
+        case 'f': return 'e'; // false
+        case 't': return 'e'; // true
     }
     return openingSymbol;
 }
