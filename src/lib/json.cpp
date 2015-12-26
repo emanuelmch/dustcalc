@@ -36,6 +36,7 @@ void Json::read(const string &content) {
 		this->readObject(content);
     } else if (firstChar == '[') {
 		this->type = JsonType::Array;
+		this->readArray(content);
     } else if (firstChar == '"') {
         this->type = JsonType::String;
         this->stringValue = getInsideChunk(content);
@@ -70,6 +71,19 @@ void Json::readObject(const string &content) {
 
 		delete memberContent;
 	}
+}
+
+void Json::readArray(const string &content) {
+    std::string innerContent = content.substr(1, content.length() - 2);
+
+    Json *element = new Json();
+    element->read(innerContent);
+    if (element->type == JsonType::Unknown) {
+        delete element;
+        return;
+    } else {
+        this->arrayValue.push_back(element);
+    }
 }
 
 Json *Json::getMember(const string &name) {

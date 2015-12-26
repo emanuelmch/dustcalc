@@ -109,3 +109,21 @@ void JsonTest::emptyArray() {
 
     CPPUNIT_ASSERT(json.arrayValue.empty());
 }
+
+void JsonTest::arrayWithOneStringElement() {
+    const string content = "[\"element\"]";
+
+    Json json;
+    json.read(content);
+
+    CPPUNIT_ASSERT(json.members.empty());
+    CPPUNIT_ASSERT(json.type == JsonType::Array);
+
+    vector<Json*> elements = json.arrayValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Element count should be 1", 1, (int)elements.size());
+
+    Json *element = elements[0];
+    CPPUNIT_ASSERT(element != NULL);
+    CPPUNIT_ASSERT_EQUAL(JsonType::String, element->type);
+    CPPUNIT_ASSERT_EQUAL(string("element"), *(element->stringValue));
+}

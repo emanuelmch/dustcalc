@@ -28,6 +28,7 @@ public:
 
 private:
 	void readObject(const std::string &);
+	void readArray(const std::string &);
 };
 
 }
