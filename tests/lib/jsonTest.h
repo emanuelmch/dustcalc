@@ -14,6 +14,10 @@ class JsonTest : public CppUnit::TestFixture {
 
 	CPPUNIT_TEST(emptyArray);
 	CPPUNIT_TEST(arrayWithOneStringElement);
+	CPPUNIT_TEST(arrayWithOneIntegerElement);
+    CPPUNIT_TEST(arrayWithOneBooleanElement_True);
+    CPPUNIT_TEST(arrayWithOneBooleanElement_False);
+    CPPUNIT_TEST(arrayWithOneObject_Empty);
 
 	CPPUNIT_TEST_SUITE_END();
 public:
@@ -26,5 +30,9 @@ public:
 
 	void emptyArray();
     void arrayWithOneStringElement();
+    void arrayWithOneIntegerElement();
+    void arrayWithOneBooleanElement_True();
+    void arrayWithOneBooleanElement_False();
+    void arrayWithOneObject_Empty();
 };
 
