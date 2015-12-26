@@ -19,7 +19,7 @@ void JsonTest::emptyObject() {
 	CPPUNIT_ASSERT(json.members.empty());
 }
 
-void JsonTest::emptyArray() {
+void JsonTest::objectWithOneArrayMember_Empty() {
 	string content = "{\"array\":[]}";
 
 	Json json;
@@ -32,4 +32,16 @@ void JsonTest::emptyArray() {
 	CPPUNIT_ASSERT_EQUAL(JsonType::Array, member->type);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Array member should be called 'array'", string("array"), *(member->name));
 	CPPUNIT_ASSERT(member->arrayValue.empty());
+}
+
+void JsonTest::emptyArray() {
+	const string content = "[]";
+
+	Json json;
+	json.read(content);
+
+	CPPUNIT_ASSERT(json.members.empty());
+	CPPUNIT_ASSERT_EQUAL(JsonType::Array, json.type);
+
+	CPPUNIT_ASSERT(json.arrayValue.empty());
 }
