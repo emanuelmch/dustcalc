@@ -15,6 +15,7 @@ void JsonTest::emptyObject() {
     Json json;
     json.read(content);
 
+    CPPUNIT_ASSERT_EQUAL(JsonType::Object, json.type);
     CPPUNIT_ASSERT(json.members.empty());
 }
 
@@ -29,6 +30,6 @@ void JsonTest::emptyArray() {
     Json* member = json.getMember("array");
     CPPUNIT_ASSERT(member != NULL);
     CPPUNIT_ASSERT_EQUAL(JsonType::Array, member->type);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Array member should be called 'array'", string("array"), member->name);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Array member should be called 'array'", string("array"), *(member->name));
     CPPUNIT_ASSERT(member->arrayValue.empty());
 }

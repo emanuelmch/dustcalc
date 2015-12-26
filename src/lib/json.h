@@ -15,13 +15,16 @@ public:
 	~Json();
 
 	std::vector<Json*> members;
-	std::string name;
+	std::string *name;
 	JsonType type;
 
-	void read(std::string);
-	Json *getMember(std::string);
+	void read(const std::string&);
+	Json *getMember(const std::string&);
 
 	std::vector<Json*> arrayValue;
+
+private:
+	void readObject(const std::string &);
 };
 
 }
