@@ -22,6 +22,11 @@ static inline std::string *getInsideChunk(const std::string &original, const int
 	return new std::string(original, beginIndex, length);
 }
 
+static inline std::string *getInsideChunk(const std::string &original) {
+	int endIndex;
+	return getInsideChunk(original, 0, &endIndex);
+}
+
 static inline std::string *getOutsideChunk(const std::string &original, const int index, int *endIndexPtr) {
 	auto endChar = getClosingSymbol(original[index]);
 	int &endIndex = *endIndexPtr;
