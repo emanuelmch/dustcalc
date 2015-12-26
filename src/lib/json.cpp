@@ -3,6 +3,7 @@
 #include "parseHelpers.h"
 
 using Lib::Json;
+using std::size_t;
 using std::string;
 using std::vector;
 
@@ -71,15 +72,23 @@ void Json::readObject(const string &content) {
 }
 
 void Json::readArray(const string &content) {
-	std::string innerContent = content.substr(1, content.length() - 2);
+	size_t previousIndex = 1;
+	// We start the search at 2 so we don't run into []
+	size_t index = content.find_first_of(",]", 2);
 
-	Json *element = new Json();
-	element->read(innerContent);
-	if (element->type == JsonType::Unknown) {
-		delete element;
-		return;
-	} else {
-		this->arrayValue.push_back(element);
+	while (index != string::npos) {
+		string nextElement = content.substr(previousIndex, index - previousIndex);
+
+		Json *element = new Json();
+		element->read(nextElement);
+		if (element->type == JsonType::Unknown) {
+			delete element;
+		} else {
+			this->arrayValue.push_back(element);
+		}
+
+		previousIndex = index + 1;
+		index = content.find_first_of(",]", index + 1);
 	}
 }
 

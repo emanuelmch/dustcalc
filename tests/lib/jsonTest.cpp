@@ -201,3 +201,36 @@ void JsonTest::arrayWithOneObject_Empty() {
 	CPPUNIT_ASSERT(element->type == JsonType::Object);
 	CPPUNIT_ASSERT(element->members.empty());
 }
+
+void JsonTest::arrayWithManyElements() {
+	const string content = "[\"one\",2,true,false]";
+
+	Json json;
+	json.read(content);
+
+	CPPUNIT_ASSERT(json.members.empty());
+	CPPUNIT_ASSERT_EQUAL(JsonType::Array, json.type);
+
+	vector<Json*> elements = json.arrayValue;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Element count should be 4", 4, (int)elements.size());
+
+	Json *stringElement = elements[0];
+	CPPUNIT_ASSERT(stringElement != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Element type should be String", JsonType::String, stringElement->type);
+	CPPUNIT_ASSERT_EQUAL(string("one"), *(stringElement->stringValue));
+
+	Json *numberElement = elements[1];
+	CPPUNIT_ASSERT(numberElement != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Element type should be Number", JsonType::Number, numberElement->type);
+	CPPUNIT_ASSERT_EQUAL((unsigned long)2, numberElement->numberValue);
+
+	Json *trueElement = elements[2];
+	CPPUNIT_ASSERT(trueElement != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Element type should be Boolean", JsonType::Boolean, trueElement->type);
+	CPPUNIT_ASSERT_EQUAL(true, trueElement->booleanValue);
+
+	Json *falseElement = elements[3];
+	CPPUNIT_ASSERT(falseElement != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Element type should be Boolean", JsonType::Boolean, falseElement->type);
+	CPPUNIT_ASSERT_EQUAL(false, falseElement->booleanValue);
+}
