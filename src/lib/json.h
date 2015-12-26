@@ -6,7 +6,7 @@
 namespace Lib {
 
 enum JsonType {
-    Unknown, String, Object, Array
+    Unknown, String, Number, Object, Array
 };
 
 class Json {
@@ -23,6 +23,7 @@ public:
 
 	std::vector<Json*> arrayValue;
 	std::string *stringValue;
+	unsigned long numberValue;
 
 private:
 	void readObject(const std::string &);

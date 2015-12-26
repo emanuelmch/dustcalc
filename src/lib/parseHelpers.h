@@ -37,3 +37,7 @@ static inline std::string *getOutsideChunk(const std::string &original, const in
 
 	return new std::string(original, index, length);
 }
+
+static inline bool isNumber(char character) {
+    return character >= '0' && character <= '9';
+}

@@ -39,6 +39,9 @@ void Json::read(const string &content) {
     } else if (firstChar == '"') {
         this->type = JsonType::String;
         this->stringValue = getInsideChunk(content);
+    } else if (isNumber(firstChar)) {
+        this->type = JsonType::Number;
+        this->numberValue = std::stoul(content);
     }
 }
 
