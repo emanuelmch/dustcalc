@@ -54,23 +54,25 @@ void Json::read(const string &content) {
 }
 
 void Json::readObject(const string &content) {
-	// We don't actually care about the '{' anymore
-	int index = 1;
+    size_t previousIndex = 1;
+    // We start the search at 2 so we don't run into {}
+    size_t index = content.find_first_of(",}", 2);
 
-	while (content[index] == '\"') {
-        int endIndex;
-        std::string *memberName = getInsideChunk(content, index, &endIndex);
-		index = endIndex + 3; // Let's bypass the closing " and the upcoming : as well
+	while (index != string::npos) {
+        string nextMember = content.substr(previousIndex, index - previousIndex);
 
-		string *memberContent = getOutsideChunk(content, index, &endIndex);
-		index = endIndex +1;
+        string memberName;
+        string memberContent;
+
+        splitString(nextMember, ':', &memberName, &memberContent);
 
 		Json *member = new Json();
-		member->name = memberName;
-		member->read(*memberContent);
+		member->name = getInsideChunk(memberName);
+		member->read(memberContent);
 		this->members.push_back(member);
 
-		delete memberContent;
+        previousIndex = index + 1;
+        index = content.find_first_of(",}", index + 1);
 	}
 }
 
