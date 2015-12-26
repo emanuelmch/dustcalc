@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <utility>
 
 static inline char getClosingSymbol(const char openingSymbol) {
     switch (openingSymbol) {
@@ -42,4 +43,10 @@ static inline std::string *getOutsideChunk(const std::string &original, const in
 
 static inline bool isNumber(char character) {
     return character >= '0' && character <= '9';
+}
+
+static inline void splitString(const std::string &original, const char delimiter, std::string *first, std::string *second) {
+    auto index = original.find(delimiter);
+    (*first) = original.substr(0, index);
+    (*second) = original.substr(index + 1, original.length() - (index + 1));
 }

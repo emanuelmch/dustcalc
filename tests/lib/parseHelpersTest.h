@@ -9,6 +9,7 @@ class ParseHelpersTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testInsideChunkWithDifferentSymbols);
 	CPPUNIT_TEST(testOutsideChunkWithMatchingSymbols);
 	CPPUNIT_TEST(testOutsideChunkWithDifferentSymbols);
+	CPPUNIT_TEST(testSplitString);
 
 	CPPUNIT_TEST_SUITE_END();
 public:
@@ -16,4 +17,5 @@ public:
 	void testInsideChunkWithDifferentSymbols();
 	void testOutsideChunkWithMatchingSymbols();
 	void testOutsideChunkWithDifferentSymbols();
+	void testSplitString();
 };
