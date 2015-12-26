@@ -98,6 +98,36 @@ void JsonTest::objectWithOneArrayMember_Empty() {
 	CPPUNIT_ASSERT(member->arrayValue.empty());
 }
 
+void JsonTest::objectWithManyMembers() {
+	const string content = "{\"one\":\"one\",\"two\":2,\"three\":true,\"four\":false}";
+
+	Json json;
+	json.read(content);
+
+	CPPUNIT_ASSERT_EQUAL(JsonType::Object, json.type);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Member count should be 4", 4, (int)json.members.size());
+
+	Json *stringMember = json.members[0];
+	CPPUNIT_ASSERT(stringMember != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Member type should be String", JsonType::String, stringMember->type);
+	CPPUNIT_ASSERT_EQUAL(string("one"), *(stringMember->stringValue));
+
+	Json *numberMember = json.members[1];
+	CPPUNIT_ASSERT(numberMember != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Member type should be Number", JsonType::Number, numberMember->type);
+	CPPUNIT_ASSERT_EQUAL((unsigned long)2, numberMember->numberValue);
+
+	Json *trueMember = json.members[2];
+	CPPUNIT_ASSERT(trueMember != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Member type should be Boolean", JsonType::Boolean, trueMember->type);
+	CPPUNIT_ASSERT_EQUAL(true, trueMember->booleanValue);
+
+	Json *falseMember = json.members[3];
+	CPPUNIT_ASSERT(falseMember != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Member type should be Boolean", JsonType::Boolean, falseMember->type);
+	CPPUNIT_ASSERT_EQUAL(false, falseMember->booleanValue);
+}
+
 void JsonTest::emptyArray() {
 	const string content = "[]";
 
