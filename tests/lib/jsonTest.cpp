@@ -35,6 +35,22 @@ void JsonTest::objectWithOneStringMember() {
 	CPPUNIT_ASSERT_EQUAL(string("value"), *(member->stringValue));
 }
 
+void JsonTest::objectWithOneIntegerMember() {
+	string content = "{\"name\":123}";
+
+	Json json;
+	json.read(content);
+
+	CPPUNIT_ASSERT_EQUAL(JsonType::Object, json.type);
+	CPPUNIT_ASSERT_EQUAL(1, (int)json.members.size());
+
+	Json* member = json.getMember("name");
+	CPPUNIT_ASSERT(member != NULL);
+	CPPUNIT_ASSERT_EQUAL(JsonType::Number, member->type);
+	CPPUNIT_ASSERT_EQUAL(string("name"), *(member->name));
+	CPPUNIT_ASSERT_EQUAL((unsigned long)123, member->numberValue);
+}
+
 void JsonTest::objectWithOneArrayMember_Empty() {
 	string content = "{\"array\":[]}";
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 
 static inline char getClosingSymbol(const char openingSymbol) {
 	switch (openingSymbol) {
@@ -37,3 +38,15 @@ static inline std::string *getOutsideChunk(const std::string &original, const in
 
 	return new std::string(original, index, length);
 }
+
+static inline bool isNumber(char character) {
+	return character >= '0' && character <= '9';
+}
+
+static inline unsigned long stringToUnsignedLong(const std::string &original) {
+	unsigned long result;
+	std::istringstream is(original);
+	is >> result;
+	return result;
+}
+
