@@ -63,9 +63,16 @@
 		<Unit filename="src/data/library.h" />
 		<Unit filename="src/lib/json.cpp" />
 		<Unit filename="src/lib/json.h" />
+		<Unit filename="src/lib/parseHelpers.h" />
 		<Unit filename="src/main.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
+		</Unit>
+		<Unit filename="tests/lib/parseHelpersTest.cpp">
+			<Option target="Tests/Debug" />
+		</Unit>
+		<Unit filename="tests/lib/parseHelpersTest.h">
+			<Option target="Tests/Debug" />
 		</Unit>
 		<Unit filename="tests/lib/jsonTest.cpp">
 			<Option target="Tests/Debug" />
