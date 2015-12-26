@@ -61,3 +61,13 @@ void ParseHelpersTest::testOutsideChunkWithDifferentSymbols() {
 	CPPUNIT_ASSERT_EQUAL(string("{1234}"), result);
 	CPPUNIT_ASSERT_EQUAL(7, endIndex);
 }
+
+void ParseHelpersTest::testSplitString() {
+	const string original = "\"teste\":123";
+	string first, second;
+
+	splitString(original, ':', &first, &second);
+
+	CPPUNIT_ASSERT_EQUAL(string("\"teste\""), first);
+	CPPUNIT_ASSERT_EQUAL(string("123"), second);
+}

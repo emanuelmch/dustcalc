@@ -45,6 +45,12 @@ static inline bool isNumber(char character) {
 	return character >= '0' && character <= '9';
 }
 
+static inline void splitString(const std::string &original, const char delimiter, std::string *first, std::string *second) {
+	auto index = original.find(delimiter);
+	(*first) = original.substr(0, index);
+	(*second) = original.substr(index + 1, original.length() - (index + 1));
+}
+
 static inline unsigned long stringToUnsignedLong(const std::string &original) {
 	unsigned long result;
 	std::istringstream is(original);
