@@ -8,7 +8,7 @@ using Lib::Json;
 using std::string;
 using std::vector;
 
-Json::Json() : name(NULL), type(Unknown) {}
+Json::Json() : name(NULL), type(Unknown), stringValue(NULL) {}
 
 Json::~Json() {
     for_each(members.begin(), members.end(),
@@ -19,6 +19,11 @@ Json::~Json() {
 	if (name != NULL) {
 		delete name;
 		name = NULL;
+	}
+
+	if (stringValue != NULL) {
+        delete stringValue;
+        stringValue = NULL;
 	}
 }
 
@@ -31,27 +36,24 @@ void Json::read(const string &content) {
 		this->readObject(content);
     } else if (firstChar == '[') {
 		this->type = JsonType::Array;
+    } else if (firstChar == '"') {
+        this->type = JsonType::String;
+        this->stringValue = getInsideChunk(content);
     }
-}
-
-static string *readName(const string &content, const int index, int *endIndex) {
-	if (content[index] == '\"') {
-		return getInsideChunk(content, index, endIndex);
-	} else {
-		return NULL;
-	}
 }
 
 void Json::readObject(const string &content) {
 	// We don't actually care about the '{' anymore
 	int index = 1;
 
-	std::string *memberName;
-	int endIndex;
-	while ((memberName = readName(content, index, &endIndex))) {
+	while (content[index] == '\"') {
+        int endIndex;
+        std::string *memberName = getInsideChunk(content, index, &endIndex);
 		index = endIndex + 3; // Let's bypass the closing " and the upcoming : as well
 
 		string *memberContent = getOutsideChunk(content, index, &endIndex);
+		index = endIndex +1;
+
 		Json *member = new Json();
 		member->name = memberName;
 		member->read(*memberContent);
