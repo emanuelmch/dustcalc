@@ -295,9 +295,10 @@ void JsonTest::objectWithArrayWithObjectWithArrayWithObject() {
 }
 
 // Private helper methods
-void JsonTest::checkString(const std::string &tag, const Lib::Json *json, const std::string &value) {
+void JsonTest::checkString(const std::string &tag, const Lib::Json *json, const std::string &value, const char *name) {
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should be of type String", JsonType::String, json->type);
+	if (name) CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have the correct name", string(name), *(json->name));
 
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any members", json->members.empty());
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any elements", json->arrayValue.empty());
@@ -305,9 +306,10 @@ void JsonTest::checkString(const std::string &tag, const Lib::Json *json, const 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have the correct stringValue", value, *(json->stringValue));
 }
 
-void JsonTest::checkNumber(const std::string &tag, const Lib::Json *json, unsigned long value) {
+void JsonTest::checkNumber(const std::string &tag, const Lib::Json *json, unsigned long value, const char *name) {
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should be of type Number", JsonType::Number, json->type);
+	if (name) CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have the correct name", string(name), *(json->name));
 
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any members", json->members.empty());
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any elements", json->arrayValue.empty());
@@ -315,25 +317,28 @@ void JsonTest::checkNumber(const std::string &tag, const Lib::Json *json, unsign
 	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have the correct numberValue", value, json->numberValue);
 }
 
-void JsonTest::checkArray(const string &tag, const Json *json, size_t count) {
+void JsonTest::checkArray(const string &tag, const Json *json, size_t count, const char *name) {
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should be of type Array", JsonType::Array, json->type);
+	if (name) CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have the correct name", string(name), *(json->name));
 
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any members", json->members.empty());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have correct number of elements", count, json->arrayValue.size());
 }
 
-void JsonTest::checkObject(const string &tag, const Json *json, size_t count) {
+void JsonTest::checkObject(const string &tag, const Json *json, size_t count, const char *name) {
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should be of type Object", JsonType::Object, json->type);
+	if (name) CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have the correct name", string(name), *(json->name));
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have correct number of members", count, json->members.size());
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any elements", json->arrayValue.empty());
 }
 
-void JsonTest::checkBoolean(const std::string &tag, const Lib::Json *json, bool value) {
+void JsonTest::checkBoolean(const std::string &tag, const Lib::Json *json, bool value, const char *name) {
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should be of type Boolean", JsonType::Boolean, json->type);
+	if (name) CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have the correct name", string(name), *(json->name));
 
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any members", json->members.empty());
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any elements", json->arrayValue.empty());
