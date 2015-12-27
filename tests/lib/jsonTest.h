@@ -1,6 +1,10 @@
 #pragma once
 
+#include "../../src/lib/json.h"
+
 #include <cppunit/extensions/HelperMacros.h>
+
+#include <string>
 
 class JsonTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(JsonTest);
@@ -44,5 +48,12 @@ public:
     void arrayWithManyElements();
 
     void objectWithArrayWithObjectWithArrayWithObject();
+
+private:
+	void checkString(const std::string&, const Lib::Json*, const std::string&);
+	void checkNumber(const std::string&, const Lib::Json*, unsigned long);
+	void checkArray(const std::string&, const Lib::Json*, unsigned long);
+	void checkObject(const std::string&, const Lib::Json*, unsigned long);
+	void checkBoolean(const std::string&, const Lib::Json*, bool);
 };
 
