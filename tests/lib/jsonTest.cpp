@@ -1,7 +1,5 @@
 #include "jsonTest.h"
 
-#include "../../src/lib/json.h"
-
 CPPUNIT_TEST_SUITE_REGISTRATION(JsonTest);
 
 using Lib::Json;
@@ -252,32 +250,19 @@ void JsonTest::arrayWithManyElements() {
 
 	Json json;
 	json.read(content);
+	checkArray("root", &json, 4);
 
-	CPPUNIT_ASSERT(json.members.empty());
-	CPPUNIT_ASSERT_EQUAL(JsonType::Array, json.type);
+	Json *stringElement = json.arrayValue[0];
+	checkString("stringElement", stringElement, "one");
 
-	vector<Json*> elements = json.arrayValue;
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Element count should be 4", 4, (int)elements.size());
+	Json *numberElement = json.arrayValue[1];
+	checkNumber("numberElement", numberElement, 2);
 
-	Json *stringElement = elements[0];
-	CPPUNIT_ASSERT(stringElement != NULL);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Element type should be String", JsonType::String, stringElement->type);
-	CPPUNIT_ASSERT_EQUAL(string("one"), *(stringElement->stringValue));
+	Json *trueElement = json.arrayValue[2];
+	checkBoolean("trueElement", trueElement, true);
 
-	Json *numberElement = elements[1];
-	CPPUNIT_ASSERT(numberElement != NULL);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Element type should be Number", JsonType::Number, numberElement->type);
-	CPPUNIT_ASSERT_EQUAL((unsigned long)2, numberElement->numberValue);
-
-	Json *trueElement = elements[2];
-	CPPUNIT_ASSERT(trueElement != NULL);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Element type should be Boolean", JsonType::Boolean, trueElement->type);
-	CPPUNIT_ASSERT_EQUAL(true, trueElement->booleanValue);
-
-	Json *falseElement = elements[3];
-	CPPUNIT_ASSERT(falseElement != NULL);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Element type should be Boolean", JsonType::Boolean, falseElement->type);
-	CPPUNIT_ASSERT_EQUAL(false, falseElement->booleanValue);
+	Json *falseElement = json.arrayValue[3];
+	checkBoolean("falseElement", falseElement, false);
 }
 
 void JsonTest::objectWithArrayWithObjectWithArrayWithObject() {
@@ -285,39 +270,73 @@ void JsonTest::objectWithArrayWithObjectWithArrayWithObject() {
 
 	Json levelOne;
 	levelOne.read(content);
-
-	CPPUNIT_ASSERT_EQUAL(JsonType::Object, levelOne.type);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Level One should have one member", (size_t)1, levelOne.members.size());
+	checkObject("levelOne", &levelOne, 1);
 
 	Json *levelTwo = levelOne.getMember("a");
-	CPPUNIT_ASSERT(levelTwo != NULL);
-	CPPUNIT_ASSERT_EQUAL(JsonType::Array, levelTwo->type);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Level Two should have two elements", (size_t)2, levelTwo->arrayValue.size());
+	checkArray("levelTwo", levelTwo, 2);
 
 	Json *levelThreeValue = levelTwo->arrayValue[0];
-	CPPUNIT_ASSERT_EQUAL(JsonType::Number, levelThreeValue->type);
-	CPPUNIT_ASSERT_EQUAL((unsigned long)222, levelThreeValue->numberValue);
+	checkNumber("levelThreeValue", levelThreeValue, 222);
 
 	Json *levelThreeObject = levelTwo->arrayValue[1];
-	CPPUNIT_ASSERT_EQUAL(JsonType::Object, levelThreeObject->type);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Level Three should have two members", (size_t)2, levelThreeObject->members.size());
+	checkObject("levelThreeObject", levelThreeObject, 2);
 
 	Json *levelFourObject = levelThreeObject->getMember("b");
-	CPPUNIT_ASSERT(levelFourObject != NULL);
-	CPPUNIT_ASSERT_EQUAL(JsonType::Array, levelFourObject->type);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Level Four should have one element", (size_t)1, levelFourObject->arrayValue.size());
+	checkArray("levelFourObject", levelFourObject, 1);
 
 	Json *levelFourValue = levelThreeObject->getMember("bb");
-	CPPUNIT_ASSERT(levelFourValue != NULL);
-	CPPUNIT_ASSERT_EQUAL(JsonType::String, levelFourValue->type);
-	CPPUNIT_ASSERT_EQUAL(string("8"), *(levelFourValue->stringValue));
+	checkString("levelFourValue", levelFourValue, "8");
 
 	Json *levelFive = levelFourObject->arrayValue[0];
-	CPPUNIT_ASSERT_EQUAL(JsonType::Object, levelFive->type);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Level Five should have one member", (size_t)1, levelFive->members.size());
+	checkObject("levelFive", levelFive, 1);
 
 	Json *levelSix = levelFive->getMember("c");
-	CPPUNIT_ASSERT(levelSix != NULL);
-	CPPUNIT_ASSERT_EQUAL(JsonType::Number, levelSix->type);
-	CPPUNIT_ASSERT_EQUAL((unsigned long)123, levelSix->numberValue);
+	checkNumber("levelSix", levelSix, 123);
+}
+
+// Private helper methods
+void JsonTest::checkString(const std::string &tag, const Lib::Json *json, const std::string &value) {
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should be of type String", JsonType::String, json->type);
+
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any members", json->members.empty());
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any elements", json->arrayValue.empty());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have the correct stringValue", value, *(json->stringValue));
+}
+
+void JsonTest::checkNumber(const std::string &tag, const Lib::Json *json, unsigned long value) {
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should be of type Number", JsonType::Number, json->type);
+
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any members", json->members.empty());
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any elements", json->arrayValue.empty());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have the correct numberValue", value, json->numberValue);
+}
+
+void JsonTest::checkArray(const string &tag, const Json *json, size_t count) {
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should be of type Array", JsonType::Array, json->type);
+
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any members", json->members.empty());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have correct number of elements", count, json->arrayValue.size());
+}
+
+void JsonTest::checkObject(const string &tag, const Json *json, size_t count) {
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should be of type Object", JsonType::Object, json->type);
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have correct number of members", count, json->members.size());
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any elements", json->arrayValue.empty());
+}
+
+void JsonTest::checkBoolean(const std::string &tag, const Lib::Json *json, bool value) {
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should be of type Boolean", JsonType::Boolean, json->type);
+
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any members", json->members.empty());
+	CPPUNIT_ASSERT_MESSAGE(tag + " should not have any elements", json->arrayValue.empty());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(tag + " should have the correct booleanValue", value, json->booleanValue);
 }
