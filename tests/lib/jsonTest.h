@@ -50,10 +50,10 @@ public:
     void objectWithArrayWithObjectWithArrayWithObject();
 
 private:
-	void checkString(const std::string&, const Lib::Json*, const std::string&);
-	void checkNumber(const std::string&, const Lib::Json*, unsigned long);
-	void checkArray(const std::string&, const Lib::Json*, unsigned long);
-	void checkObject(const std::string&, const Lib::Json*, unsigned long);
-	void checkBoolean(const std::string&, const Lib::Json*, bool);
+	void checkString(const std::string&, const Lib::Json*, const std::string&, const char* = NULL);
+	void checkNumber(const std::string&, const Lib::Json*, unsigned long, const char* = NULL);
+	void checkArray(const std::string&, const Lib::Json*, unsigned long, const char* = NULL);
+	void checkObject(const std::string&, const Lib::Json*, unsigned long, const char* = NULL);
+	void checkBoolean(const std::string&, const Lib::Json*, bool, const char* = NULL);
 };
 
