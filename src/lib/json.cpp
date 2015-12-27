@@ -2,6 +2,8 @@
 
 #include "parseHelpers.h"
 
+#include <cassert>
+
 using Lib::Json;
 using std::size_t;
 using std::string;
@@ -51,35 +53,64 @@ void Json::read(const string &content) {
 }
 
 void Json::readObject(const string &content) {
-	size_t previousIndex = 1;
-	// We start the search at 2 so we don't run into {}
-	size_t index = content.find_first_of(",}", 2);
+	// Remove the enclosing {}
+	auto innerContentPtr = getInsideChunk(content);
+	string innerContent = *innerContentPtr;
+	delete innerContentPtr;
+	assert(innerContent.length() == content.length() - 2);
 
-	while (index != string::npos) {
-		string nextMember = content.substr(previousIndex, index - previousIndex);
+	size_t previousIndex = 0;
+	size_t index = 0;
+	size_t length = innerContent.length();
 
-		string memberName;
-		string memberContent;
+	while (previousIndex < length && index != string::npos) {
+		index = innerContent.find(':', previousIndex);
+		if (index == string::npos) break;
 
-		splitString(nextMember, ':', &memberName, &memberContent);
+		string memberName = innerContent.substr(previousIndex, index - previousIndex);
+		previousIndex = index + 1;
+
+		char nextChar = innerContent.at(previousIndex);
+		if (nextChar == '{' || nextChar == '[') {
+			index = findEnclosingIndex(innerContent, previousIndex) + 1;
+		} else {
+			index = innerContent.find(',', previousIndex);
+		}
+
+		string memberContent = innerContent.substr(previousIndex, index - previousIndex);
+		previousIndex = index + 1;
 
 		Json *member = new Json();
 		member->name = getInsideChunk(memberName);
 		member->read(memberContent);
 		this->members.push_back(member);
-
-		previousIndex = index + 1;
-		index = content.find_first_of(",}", index + 1);
 	}
 }
 
 void Json::readArray(const string &content) {
-	size_t previousIndex = 1;
-	// We start the search at 2 so we don't run into []
-	size_t index = content.find_first_of(",]", 2);
+	// Remove the enclosing []
+	auto innerContentPtr = getInsideChunk(content);
+	string innerContent = *innerContentPtr;
+	delete innerContentPtr;
 
-	while (index != string::npos) {
-		string nextElement = content.substr(previousIndex, index - previousIndex);
+	assert(innerContent.length() == content.length() - 2);
+
+	size_t previousIndex = 0;
+	size_t index = 0;
+	size_t length = innerContent.length();
+
+	while (previousIndex < length && index != string::npos) {
+		char nextChar = innerContent.at(previousIndex);
+		if (nextChar == ']') break;
+
+		if (nextChar == '{' || nextChar == '[') {
+			index = findEnclosingIndex(innerContent, previousIndex) + 1;
+		} else {
+			index = innerContent.find(',', previousIndex);
+		}
+
+		string nextElement = innerContent.substr(previousIndex, index - previousIndex);
+		previousIndex = index + 1;
 
 		Json *element = new Json();
 		element->read(nextElement);
@@ -88,9 +119,6 @@ void Json::readArray(const string &content) {
 		} else {
 			this->arrayValue.push_back(element);
 		}
-
-		previousIndex = index + 1;
-		index = content.find_first_of(",]", index + 1);
 	}
 }
 

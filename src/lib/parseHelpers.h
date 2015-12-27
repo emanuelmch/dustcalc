@@ -1,7 +1,25 @@
 #pragma once
 
+#include <cassert>
 #include <string>
 #include <sstream>
+
+static inline char getClosingSymbol(const char openingSymbol);
+
+static inline int findEnclosingIndex(const std::string &original, int index) {
+	const char start = original[index];
+	const char end = getClosingSymbol(start);
+	int level = 1;
+	while (level > 0) {
+		const char nextChar = original[++index];
+		assert(nextChar != 0);
+
+		if (nextChar == start) level++;
+		if (nextChar == end) level--;
+	}
+
+	return index;
+}
 
 static inline char getClosingSymbol(const char openingSymbol) {
 	switch (openingSymbol) {
@@ -17,7 +35,7 @@ static inline std::string *getInsideChunk(const std::string &original, const int
 	auto endChar = getClosingSymbol(original[index]);
 	int &endIndex = *endIndexPtr;
 	auto beginIndex = index + 1;
-	endIndex = original.find(endChar, beginIndex);
+	endIndex = original.find_last_of(endChar, original.length() - beginIndex);
 
 	auto length = endIndex - beginIndex;
 	--endIndex;
@@ -34,7 +52,7 @@ static inline std::string *getOutsideChunk(const std::string &original, const in
 	auto endChar = getClosingSymbol(original[index]);
 	int &endIndex = *endIndexPtr;
 	auto beginIndex = index + 1;
-	endIndex = original.find(endChar, beginIndex);
+	endIndex = original.find_last_of(endChar, original.length() - beginIndex);
 
 	auto length = endIndex + 1 - index;
 
