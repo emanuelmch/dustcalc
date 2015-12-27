@@ -264,3 +264,45 @@ void JsonTest::arrayWithManyElements() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Element type should be Boolean", JsonType::Boolean, falseElement->type);
     CPPUNIT_ASSERT_EQUAL(false, falseElement->booleanValue);
 }
+
+void JsonTest::objectWithArrayWithObjectWithArrayWithObject() {
+    const string content = "{\"a\":[222,{\"b\":[{\"c\":123}],\"bb\":\"8\"}]}";
+
+    Json levelOne;
+    levelOne.read(content);
+
+    CPPUNIT_ASSERT_EQUAL(JsonType::Object, levelOne.type);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Level One should have one member", (unsigned long)1, levelOne.members.size());
+
+    Json *levelTwo = levelOne.getMember("a");
+    CPPUNIT_ASSERT(levelTwo != NULL);
+    CPPUNIT_ASSERT_EQUAL(JsonType::Array, levelTwo->type);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Level Two should have two elements", (unsigned long)2, levelTwo->arrayValue.size());
+
+	Json *levelThreeValue = levelTwo->arrayValue[0];
+	CPPUNIT_ASSERT_EQUAL(JsonType::Number, levelThreeValue->type);
+	CPPUNIT_ASSERT_EQUAL((unsigned long)222, levelThreeValue->numberValue);
+
+    Json *levelThreeObject = levelTwo->arrayValue[1];
+    CPPUNIT_ASSERT_EQUAL(JsonType::Object, levelThreeObject->type);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Level Three should have two members", (unsigned long)2, levelThreeObject->members.size());
+
+    Json *levelFourObject = levelThreeObject->getMember("b");
+    CPPUNIT_ASSERT(levelFourObject != NULL);
+    CPPUNIT_ASSERT_EQUAL(JsonType::Array, levelFourObject->type);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Level Four should have one element", (unsigned long)1, levelFourObject->arrayValue.size());
+
+	Json *levelFourValue = levelThreeObject->getMember("bb");
+	CPPUNIT_ASSERT(levelFourValue != NULL);
+	CPPUNIT_ASSERT_EQUAL(JsonType::String, levelFourValue->type);
+	CPPUNIT_ASSERT_EQUAL(string("8"), *(levelFourValue->stringValue));
+
+    Json *levelFive = levelFourObject->arrayValue[0];
+    CPPUNIT_ASSERT_EQUAL(JsonType::Object, levelFive->type);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Level Five should have one member", (unsigned long)1, levelFive->members.size());
+
+    Json *levelSix = levelFive->getMember("c");
+    CPPUNIT_ASSERT(levelSix != NULL);
+    CPPUNIT_ASSERT_EQUAL(JsonType::Number, levelSix->type);
+    CPPUNIT_ASSERT_EQUAL((unsigned long)123, levelSix->numberValue);
+}
