@@ -98,6 +98,21 @@ void JsonTest::objectWithOneArrayMember_Empty() {
     CPPUNIT_ASSERT(member->arrayValue.empty());
 }
 
+void JsonTest::objectWithSpacedStrings() {
+	const string content = "{\"My name is\":\"Jason. Ha!\"}";
+
+	Json json;
+	json.read(content);
+
+    CPPUNIT_ASSERT_EQUAL(JsonType::Object, json.type);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Member count should be 1", 1, (int)json.members.size());
+
+	Json* member = json.getMember("My name is");
+    CPPUNIT_ASSERT(member != NULL);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Member type should be String", JsonType::String, member->type);
+    CPPUNIT_ASSERT_EQUAL(string("Jason. Ha!"), *(member->stringValue));
+}
+
 void JsonTest::objectWithManyMembers() {
     const string content = "{\"one\":\"one\",\"two\":2,\"three\":true,\"four\":false}";
 
