@@ -27,6 +27,7 @@ class JsonTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(arrayWithManyElements);
 
 	CPPUNIT_TEST(objectWithArrayWithObjectWithArrayWithObject);
+	CPPUNIT_TEST(simplifiedRealData);
 
 	CPPUNIT_TEST_SUITE_END();
 public:
@@ -48,6 +49,7 @@ public:
     void arrayWithManyElements();
 
     void objectWithArrayWithObjectWithArrayWithObject();
+    void simplifiedRealData();
 
 private:
 	void checkString(const std::string&, const Lib::Json*, const std::string&, const char* = NULL);

@@ -294,6 +294,38 @@ void JsonTest::objectWithArrayWithObjectWithArrayWithObject() {
     checkNumber("levelSix", levelSix, 123);
 }
 
+void JsonTest::simplifiedRealData() {
+	const string content = "[{\"true\":true,\"string\":\"strange\",\"array\":[\"str1\",\"str3\",\"str2\"]},{\"one\":1,\"hue\":\"hue\",\"false\":false,\"array\":[\"EMPTY\"]},{\"me\":\"mario\",\"six\":6,\"special\":\"( 1.)\"}]";
+
+	Json json;
+	json.read(content);
+
+	checkArray("root", &json, 3);
+
+	Json *firstElement = json.arrayValue[0];
+	checkObject("1stElement", firstElement, 3);
+    checkBoolean("1stElement1stMember", firstElement->members[0], true, "true");
+    checkString("1stElement2ndMember", firstElement->members[1], "strange", "string");
+    checkArray("1stElement3rdMember", firstElement->members[2], 3, "array");
+    checkString("1stElement3rdMember1stElement", firstElement->members[2]->arrayValue[0], "str1");
+    checkString("1stElement3rdMember2ndElement", firstElement->members[2]->arrayValue[1], "str3");
+    checkString("1stElement3rdMember3rdElement", firstElement->members[2]->arrayValue[2], "str2");
+
+    Json *secondElement = json.arrayValue[1];
+	checkObject("2ndElement", secondElement, 4);
+	checkNumber("2ndElement1stMember", secondElement->members[0], 1, "one");
+	checkString("2ndElement2ndMember", secondElement->members[1], "hue", "hue");
+	checkBoolean("2ndElement3rdMember", secondElement->members[2], false, "false");
+	checkArray("2ndElement4thMember", secondElement->members[3], 1, "array");
+	checkString("2ndElement4thMember1stElement", secondElement->members[3]->arrayValue[0], "EMPTY");
+
+    Json *thirdElement = json.arrayValue[2];
+	checkObject("3rdElement", thirdElement, 3);
+	checkString("3rdElement1stMember", thirdElement->members[0], "mario", "me");
+	checkNumber("3rdElement2ndMember", thirdElement->members[1], 6, "six");
+	checkString("3rdElement3rdMember", thirdElement->members[2], "( 1.)", "special");
+}
+
 // Private helper methods
 void JsonTest::checkString(const std::string &tag, const Lib::Json *json, const std::string &value, const char *name) {
     CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);
