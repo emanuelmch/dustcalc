@@ -16,6 +16,9 @@ public:
 	void fromJson(const std::string &);
 
 	std::vector<CardSet*> cardSets;
+
+private:
+	CardSet *getCardSet(const std::string &);
 };
 
 }

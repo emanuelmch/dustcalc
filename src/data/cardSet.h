@@ -1,12 +1,15 @@
 #pragma once
 
+#include <string>
+
 namespace Data {
 
 class CardSet {
 public:
-	CardSet() {}
-	CardSet(unsigned int common, unsigned int rare, unsigned int epic, unsigned int legendary) :
-		commonCount(common), rareCount(rare), epicCount(epic), legendaryCount(legendary) {}
+	CardSet(const std::string &setName) :
+		name(setName), commonCount(0), rareCount(0), epicCount(0), legendaryCount(0) {}
+
+	std::string name;
 
 	unsigned int commonCount;
 	unsigned int rareCount;
