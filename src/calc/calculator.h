@@ -3,14 +3,14 @@
 #include "../data/collection.h"
 #include "../data/library.h"
 
-#include <list>
 #include <string>
+#include <vector>
 
 namespace Calc {
 
 struct CalcResult {
 	std::string name;
-	int expectedValue;
+	unsigned int expectedValue;
 };
 
 class Calculator {
@@ -18,7 +18,7 @@ public:
 	Calculator();
 	~Calculator();
 
-	std::list<CalcResult> calculateAll(Data::Library&,Data::Collection&);
+	std::vector<CalcResult> calculateAll(Data::Library&,Data::Collection&);
 };
 
 }
