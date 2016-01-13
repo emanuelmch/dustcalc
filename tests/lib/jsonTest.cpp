@@ -339,6 +339,16 @@ void JsonTest::stringWithCommas() {
 	checkString("is it, like, true?", json.getMember("is it, like, true?"), "Well, certainly!", "is it, like, true?");
 }
 
+void JsonTest::stringWithEscapedQuotes() {
+	const string content = "{\"a\":\"\\\"b\\\"\"}";
+
+	Json json;
+	json.read(content);
+
+	checkObject("root", &json, 1);
+	checkString("a", json.getMember("a"), "\"b\"", "a");
+}
+
 // Private helper methods
 void JsonTest::checkString(const std::string &tag, const Lib::Json *json, const std::string &value, const char *name) {
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);

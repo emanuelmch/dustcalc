@@ -21,7 +21,14 @@ static inline int findEnclosingIndex(const std::string &original, int index) {
 	const char end = getClosingSymbol(start);
 	// If they're the same we don't need to worry about nesting
 	if (start == end) {
-		return original.find(start, index + 1);
+		int end = original.find(start, index + 1);
+
+		// But we still have to ignore escaped characters
+		while (original.at(end - 1) == '\\') {
+			end = original.find(start, end + 1);
+		}
+
+		return end;
 	}
 
 	// Otherwise we might get some nasty stuff like {{{}{}}{}}.

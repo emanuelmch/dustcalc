@@ -40,6 +40,12 @@ void Json::read(const string &content) {
 	} else if (firstChar == '"') {
 		this->type = JsonType::String;
 		this->stringValue = getInsideChunk(content);
+		// Now "un-escape" the quote characters
+		size_t index = stringValue->find("\\\"");
+		while (index != string::npos) {
+			stringValue->replace(index, 2, "\"");
+			index = stringValue->find("\\\"", index);
+		}
 	} else if (isNumber(firstChar)) {
 		this->type = JsonType::Number;
 		this->numberValue = stringToUnsignedLong(content);

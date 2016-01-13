@@ -31,6 +31,7 @@ class JsonTest : public CppUnit::TestFixture {
 
 	// Regression tests
 	CPPUNIT_TEST(stringWithCommas);
+	CPPUNIT_TEST(stringWithEscapedQuotes);
 
 	CPPUNIT_TEST_SUITE_END();
 public:
@@ -56,6 +57,7 @@ public:
 
 	// Regression tests
 	void stringWithCommas();
+	void stringWithEscapedQuotes();
 
 private:
 	void checkString(const std::string&, const Lib::Json*, const std::string&, const char* = NULL);
