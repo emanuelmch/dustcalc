@@ -5,10 +5,33 @@
 #include <sstream>
 
 static inline char getClosingSymbol(const char openingSymbol);
+static inline bool isNumber(char character);
 
 static inline int findEnclosingIndex(const std::string &original, int index) {
 	const char start = original[index];
+
+	// Numbers are special! oh my! They end on the first non-numerical char
+	if (isNumber(start)) {
+		// Numbers end on the first non-numerical char
+		while (isNumber(original[++index]));
+
+		return index - 1;
+	}
+
 	const char end = getClosingSymbol(start);
+	// If they're the same we don't need to worry about nesting
+	if (start == end) {
+		int end = original.find(start, index + 1);
+
+		// But we still have to ignore escaped characters
+		while (original.at(end - 1) == '\\') {
+			end = original.find(start, end + 1);
+		}
+
+		return end;
+	}
+
+	// Otherwise we might get some nasty stuff like {{{}{}}{}}.
 	int level = 1;
 	while (level > 0) {
 		const char nextChar = original[++index];

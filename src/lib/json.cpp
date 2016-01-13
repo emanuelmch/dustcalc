@@ -40,6 +40,12 @@ void Json::read(const string &content) {
 	} else if (firstChar == '"') {
 		this->type = JsonType::String;
 		this->stringValue = getInsideChunk(content);
+		// Now "un-escape" the quote characters
+		size_t index = stringValue->find("\\\"");
+		while (index != string::npos) {
+			stringValue->replace(index, 2, "\"");
+			index = stringValue->find("\\\"", index);
+		}
 	} else if (isNumber(firstChar)) {
 		this->type = JsonType::Number;
 		this->numberValue = stringToUnsignedLong(content);
@@ -70,12 +76,7 @@ void Json::readObject(const string &content) {
 		string memberName = innerContent.substr(previousIndex, index - previousIndex);
 		previousIndex = index + 1;
 
-		char nextChar = innerContent.at(previousIndex);
-		if (nextChar == '{' || nextChar == '[') {
-			index = findEnclosingIndex(innerContent, previousIndex) + 1;
-		} else {
-			index = innerContent.find(',', previousIndex);
-		}
+		index = findEnclosingIndex(innerContent, previousIndex) + 1;
 
 		string memberContent = innerContent.substr(previousIndex, index - previousIndex);
 		previousIndex = index + 1;
