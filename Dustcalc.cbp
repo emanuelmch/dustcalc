@@ -57,6 +57,7 @@
 		</Compiler>
 		<Unit filename="src/calc/calculator.cpp" />
 		<Unit filename="src/calc/calculator.h" />
+		<Unit filename="src/data/cardSet.h" />
 		<Unit filename="src/data/collection.cpp" />
 		<Unit filename="src/data/collection.h" />
 		<Unit filename="src/data/library.cpp" />
@@ -68,16 +69,22 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
-		<Unit filename="tests/lib/parseHelpersTest.cpp">
+		<Unit filename="tests/data/libraryTest.cpp">
 			<Option target="Tests/Debug" />
 		</Unit>
-		<Unit filename="tests/lib/parseHelpersTest.h">
+		<Unit filename="tests/data/libraryTest.h">
 			<Option target="Tests/Debug" />
 		</Unit>
 		<Unit filename="tests/lib/jsonTest.cpp">
 			<Option target="Tests/Debug" />
 		</Unit>
 		<Unit filename="tests/lib/jsonTest.h">
+			<Option target="Tests/Debug" />
+		</Unit>
+		<Unit filename="tests/lib/parseHelpersTest.cpp">
+			<Option target="Tests/Debug" />
+		</Unit>
+		<Unit filename="tests/lib/parseHelpersTest.h">
 			<Option target="Tests/Debug" />
 		</Unit>
 		<Unit filename="tests/main.cpp">
