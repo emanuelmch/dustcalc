@@ -326,6 +326,19 @@ void JsonTest::simplifiedRealData() {
 	checkString("3rdElement3rdMember", thirdElement->members[2], "( 1.)", "special");
 }
 
+void JsonTest::stringWithCommas() {
+	string content = "{\"Commas\":\"I have, you know, some commas\",\"is it, like, true?\":\"Well, certainly!\"}";
+
+	Json json;
+	json.read(content);
+
+	CPPUNIT_ASSERT_EQUAL(JsonType::Object, json.type);
+	CPPUNIT_ASSERT_EQUAL(2, (int)json.members.size());
+
+	checkString("Commas", json.getMember("Commas"), "I have, you know, some commas", "Commas");
+	checkString("is it, like, true?", json.getMember("is it, like, true?"), "Well, certainly!", "is it, like, true?");
+}
+
 // Private helper methods
 void JsonTest::checkString(const std::string &tag, const Lib::Json *json, const std::string &value, const char *name) {
 	CPPUNIT_ASSERT_MESSAGE(tag + " should not be null", json != NULL);
